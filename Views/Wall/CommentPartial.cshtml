@@ -1,0 +1,11 @@
+@model Comment
+<div class="col col-md-8">
+    <form asp-action="NewComment" asp-route-id="@ViewBag.message.Messageid" asp-controller="Wall">
+        <div class="form-group">
+            <span asp-validation-for="Comment_Message"></span>
+            <label asp-for="Comment_Message">Post a Comment</label>
+            <input type="text" asp-for="Comment_Message" class="form-control" placeholder="Add your comment here!">
+        </div>
+        <button type="submit" class="btn btn-secondary">Post a Comment</button>
+    </form>
+</div>

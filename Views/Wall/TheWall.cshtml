@@ -1,0 +1,46 @@
+@model Message
+Welcome @ViewBag.loggedUser.First_Name!!
+
+<form asp-action="NewMessage" asp-controller="Wall">
+    <div class="form-group">
+        <span asp-validation-for="Content"></span>
+        <label asp-for="Content" for="exampleFormControlInput1">Post a message</label>
+        <input type="text" asp-for="Content" class="form-control" id="exampleFormControlInput1" placeholder="Add your comment here!">
+    </div>
+    <button type="submit" class="btn btn-primary">Post a Message</button>
+</form>
+
+<div class="row">
+@{
+    @foreach(var message in ViewBag.AllMessages)
+    {
+        DateTime CurrentTime = DateTime.Now;
+        string format = "MMMM d, yyyy ";
+        <div class="col col-md-6">
+            <p>@message.Creator.First_Name @message.Creator.Last_Name @message.Created_At.ToString(format)</p>
+            <p>@message.Content</p>
+            @if(message.Created_At.AddMinutes(30) > CurrentTime)
+            {
+                <a href="TheWall/delete/message/@message.Messageid"><button class="btn btn-warning">DELETE</button></a>
+            }
+            <hr>
+        </div>
+        <div class="col col-md-6" style="margin-top: 80px;">
+        @foreach(var comment in message.MessagesComments)
+        {
+            <div style="border: 2px solid black; margin: 2px;">
+            <p>@comment.Commentor.First_Name @comment.Commentor.Last_Name @comment.Created_At.ToString(format) </p>
+                @if(comment.Userid == ViewBag.loggedUser.Userid)
+                {
+                    <a href="TheWall/delete/@comment.Commentid">DELETE</a>
+                }
+            <p>@comment.Comment_Message</p>
+            </div>
+        }
+        </div>
+        ViewBag.message = message;
+        Comment newComment = new Comment();
+        <partial name="CommentPartial" view-data="ViewData" model="newComment"></partial>
+    }   
+}
+</div>
